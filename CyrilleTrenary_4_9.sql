@@ -1,0 +1,36 @@
+--====================================================== 
+--Cyrille Trenary
+--CIS338: SQL / Oracle
+--UNIT 4, CHAPTER 4-9 Assignment
+--======================================================
+
+ Declare
+
+CURSOR PLEDGE_PAYMENT IS
+
+SELECT DD_PLEDGE.IDPLEDGE, DD_PLEDGE.PLEDGEAMT, 
+DD_PLEDGE.PAYMONTHS, DD_PAYMENT.PAYDATE, DD_PAYMENT.PAYAMT
+FROM ((DD_DONOR INNER JOIN DD_PLEDGE ON DD_DONOR.IDDONOR=DD_PLEDGE.IDDONOR) 
+INNER JOIN DD_PAYMENT on DD_PLEDGE.IDPLEDGE = DD_PAYMENT.IDPLEDGE); 
+--ORDER BY IDPLEDGE, PAYDATE;
+
+Rec_Pledge_Payment Pledge_Payment%rowtype;
+
+BEGIN
+
+OPEN PLEDGE_PAYMENT;
+
+LOOP
+
+    FETCH PLEDGE_PAYMENT INTO Rec_Pledge_Payment;
+
+        EXIT When PLEDGE_PAYMENT%NOTFOUND;
+
+        dbms_output.put_line(PLEDGE_PAYMENT.IDPLEDGE||' '
+            || PLEDGE_PAYMENT.PLEDGEAMT||' '||PLEDGE_PAYMENT.PAYMONTHS
+            ||' '||PLEDGE_PAYMENT.PAYDATE||' '||PLEDGE_PAYMENT.PAYAMT);
+
+END LOOP;
+CLOSE PLEDGE_PAYMENT;
+
+END;
